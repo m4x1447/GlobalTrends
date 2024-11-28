@@ -1,0 +1,76 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(36, 36, 36);
+    margin: 0;
+    padding: 20px;
+}
+
+/* Title styling */
+h1 {
+    color: #333;
+    margin: 16px 0px 16px 0px;
+}
+
+/* List styling */
+ul {
+    list-style-type: none;
+    padding: 0;
+    max-height: 65vh;
+    overflow: hidden;
+}
+
+li {
+    background: #fff;
+    margin: 5px 0;
+    width: 600px;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.trendsContainer {
+    display: flex;
+    height: auto;
+}
+
+.trendsResults {
+    margin-bottom: 16px;
+    display: block;
+}
+
+/* Map container styling */
+#map {
+    margin: 16px;
+    height: 70vh;
+    width: 65vw;
+}
+
+/* skal skal bli "loadingbar(en)" for neste land. */
+.countryTimer {
+    width: 100%;
+    border: 1px red solid;
+    height: 1vh;
+}
+
+.countryFlag {
+    padding: 5px;
+    background-color: #2e2e2e;
+    border-top: 1px solid #3b3b3b;
+    height: 20vh;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background-size: cover;
+}
+
+.countryFlag img{
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+}

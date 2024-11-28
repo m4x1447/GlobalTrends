@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Searches in Norway</title>
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <section id="countryICO" class="countryFlag" style="display: none;">
+        <img src="{{ url_for('static', filename='img/Flag_of_Norway.png') }}" alt="Norway Flag">
+    </section>
+
+    <section class="trendsContainer">
+        <div id="trendsResults" class="trendsResults">
+            <h1 style="color: white;" >Current Trending Searches in Norway</h1>
+            <!---->
+            <ul>
+                {% for trend in trends %}
+                <li>{{ trend }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id="map"></div>
+    </section>
+
+    <section class="countryTimer">
+
+    </section>
+
+
+    <!-- Leaflet Map Container -->
+
+
+    <!-- Leaflet JS (external CDN) - Make sure this is before your leaf.js -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script src="{{ url_for('static', filename='leaf.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Link to external JavaScript files -->
+    <script src="{{ url_for('static', filename='leaf.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
