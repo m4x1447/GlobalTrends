@@ -18,23 +18,30 @@ pytrends = TrendReq(hl='en-US', tz=360)
 
 # Valid countries for trending searches
 VALID_COUNTRIES = {
-    'argentina': 'AR',  # Argentina
-    'australia': 'AU',  # Australia
-    'brazil': 'BR',     # Brazil
-    'canada': 'CA',     # Canada
-    'france': 'FR',     # France
-    'germany': 'DE',    # Germany
-    'india': 'IN',      # India
-    'italy': 'IT',      # Italy
-    'japan': 'JP',      # Japan
-    'mexico': 'MX',     # Mexico
-    'netherlands': 'NL',# Netherlands
-    'new_zealand': 'NZ',# New Zealand
-    'norway': 'NO',     # Norway
-    'spain': 'ES',      # Spain
-    'sweden': 'SE',     # Sweden
-    'united_kingdom': 'GB',  # United Kingdom (UK)
-    'united_states': 'US'    # United States
+    'argentina': 'AR',      # Argentina
+    'australia': 'AU',      # Australia
+    'brazil': 'BR',         # Brazil
+    'canada': 'CA',         # Canada
+    'france': 'FR',         # France
+    'germany': 'DE',        # Germany
+    'india': 'IN',          # India
+    'italy': 'IT',          # Italy
+    'japan': 'JP',          # Japan
+    'mexico': 'MX',         # Mexico
+    'netherlands': 'NL',    # Netherlands
+    'new_zealand': 'NZ',    # New Zealand
+    'norway': 'NO',         # Norway
+    'spain': 'ES',          # Spain
+    'sweden': 'SE',         # Sweden
+    'united_kingdom': 'GB', # United Kingdom (UK)
+    'united_states': 'US',  # United States
+    'russia': 'RU',         # Russia
+    'china': 'CN',          # China
+    'south_africa': 'ZA',   # South Africa
+    'south_korea': 'KR',    # South Korea
+    'saudi_arabia': 'SA',   # Saudi Arabia
+    'turkey': 'TR',         # Turkey
+    'egypt': 'EG'           # Egypt
 }
 
 @app.route("/")

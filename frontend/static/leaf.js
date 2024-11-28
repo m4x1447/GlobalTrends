@@ -21,6 +21,16 @@ const brazilMarker = L.marker([-14.2350, -51.9253]).addTo(map).bindPopup("Brazil
 const canadaMarker = L.marker([56.1304, -106.3468]).addTo(map).bindPopup("Canada");
 const indiaMarker = L.marker([20.5937, 78.9629]).addTo(map).bindPopup("India");
 const italyMarker = L.marker([41.9028, 12.4964]).addTo(map).bindPopup("Italy");
+const russiaMarker = L.marker([61.5240, 105.3188]).addTo(map).bindPopup("Russia");
+const spainMarker = L.marker([40.4637, -3.7492]).addTo(map).bindPopup("Spain");
+const chinaMarker = L.marker([35.8617, 104.1954]).addTo(map).bindPopup("China");
+const southAfricaMarker = L.marker([-30.5595, 22.9375]).addTo(map).bindPopup("South Africa");
+const mexicoMarker = L.marker([23.6345, -102.5528]).addTo(map).bindPopup("Mexico");
+const japanMarker = L.marker([36.2048, 138.2529]).addTo(map).bindPopup("Japan");
+const egyptMarker = L.marker([26.8206, 30.8025]).addTo(map).bindPopup("Egypt");
+const southKoreaMarker = L.marker([35.9078, 127.7669]).addTo(map).bindPopup("South Korea");
+const ukMarker = L.marker([55.3781, -3.4360]).addTo(map).bindPopup("United Kingdom");
+const swedenMarker = L.marker([60.1282, 18.6435]).addTo(map).bindPopup("Sweden");
 
 
 // Marker click handlers
@@ -34,6 +44,16 @@ brazilMarker.on('click', () => fetchTrends('brazil'));
 canadaMarker.on('click', () => fetchTrends('canada'));
 indiaMarker.on('click', () => fetchTrends('india'));
 italyMarker.on('click', () => fetchTrends('italy'));
+russiaMarker.on('click', () => fetchTrends('russia'));
+spainMarker.on('click', () => fetchTrends('spain'));
+chinaMarker.on('click', () => fetchTrends('china'));
+southAfricaMarker.on('click', () => fetchTrends('south_africa'));
+mexicoMarker.on('click', () => fetchTrends('mexico'));
+japanMarker.on('click', () => fetchTrends('japan'));
+egyptMarker.on('click', () => fetchTrends('egypt'));
+southKoreaMarker.on('click', () => fetchTrends('south_korea'));
+ukMarker.on('click', () => fetchTrends('united_kingdom'));
+swedenMarker.on('click', () => fetchTrends('sweden'));
 
 // Funksjon for å hente trender fra API-et
 function fetchTrends(country) {
