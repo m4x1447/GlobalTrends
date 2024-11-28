@@ -21,8 +21,6 @@ h1 {
 ul {
     list-style-type: none;
     padding: 0;
-    max-height: 65vh;
-    overflow: hidden;
 }
 
 li {
@@ -48,12 +46,17 @@ li {
 #map {
     margin: 16px;
     height: 70vh;
-    width: 65vw;
+    width: 100vw;
 }
 
 /* skal skal bli "loadingbar(en)" for neste land. */
 .countryTimer {
-    width: 100%;
-    border: 1px red solid;
-    height: 1vh;
+    position: fixed; /* Sticks to a specific viewport position */
+    bottom: 0;      /* Aligns to the bottom of the viewport */
+    left: 0;        /* Aligns to the left */
+    width: 100%;    /* Takes up full width */
+    background-color: #333; /* Background color */
+    color: white;   /* Text color */
+    text-align: center;
+    padding: 10px 0; /* Padding for better appearance */
 }
