@@ -1,19 +1,21 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 /* Basic page styling */
 body {
     font-family: Arial, sans-serif;
     background-color: rgb(36, 36, 36);
+    color: white;
     margin: 0;
     padding: 20px;
 }
 
 /* Title styling */
 h1 {
-    color: #333;
+    color: #1c1616;
     margin: 16px 0px 16px 0px;
 }
 
@@ -24,39 +26,130 @@ ul {
 }
 
 li {
-    background: #fff;
+    background: #0b0b0b;
     margin: 5px 0;
-    width: 600px;
     padding: 10px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Trends Container Layout */
 .trendsContainer {
     display: flex;
+    flex-direction: row;
+    gap: 20px;
     height: auto;
-}
-
-.trendsResults {
-    margin-bottom: 16px;
-    display: block;
+    justify-content: flex-start;
 }
 
 /* Map container styling */
 #map {
-    margin: 16px;
     height: 70vh;
-    width: 100vw;
+    width: 100%;
+    position: relative;
+    margin-bottom: 20px;
 }
 
-/* skal skal bli "loadingbar(en)" for neste land. */
-.countryTimer {
-    position: fixed; /* Sticks to a specific viewport position */
-    bottom: 0;      /* Aligns to the bottom of the viewport */
-    left: 0;        /* Aligns to the left */
-    width: 100%;    /* Takes up full width */
-    background-color: #333; /* Background color */
-    color: white;   /* Text color */
+/* Tab and Menu styling */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+.tab-button.active {
+    background-color: #888;
+}
+
+/* Tab-innhold */
+.tab-content {
+    display: none;
+    width: 100%;
+}
+
+/* Styling for Map tab */
+#map-tab {
+    display: block; /* Make sure map view is shown initially */
+}
+
+/* Menu View Styling */
+#menu-tab {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Left side (Country list) */
+.country-menu {
+    list-style-type: none;
+    padding: 0;
+    width: 250px;
+}
+
+.country-menu li {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #444;
+    color: white;
+    margin-bottom: 5px;
     text-align: center;
-    padding: 10px 0; /* Padding for better appearance */
+}
+
+.country-menu li:hover {
+    background-color: #555;
+}
+
+/* Right side (Trends) */
+.trends-view {
+    width: calc(100% - 270px); /* Adjust based on the width of the country list */
+    padding: 20px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.trends-view h2 {
+    font-size: 1.5em;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.trends-view ul {
+    padding-left: 20px;
+}
+
+.trends-view ul li {
+    font-size: 1.2em;
+    padding: 5px;
+    border-bottom: 1px solid #666;
+}
+
+/* Styling for the country flag and information section */
+.country-info {
+    margin-top: 20px;
+    display: none;
+    padding: 10px;
+    background-color: #444;
+    border-radius: 5px;
+}
+
+.country-info img {
+    width: 30px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.country-info p {
+    display: inline-block;
+    color: white;
 }

@@ -14,6 +14,38 @@
 </head>
 
 <body>
+    <div>
+        <!-- Buttons for switching tabs -->
+        <button class="tab-button" onclick="showTab('mapTab')">Map View</button>
+        <button class="tab-button" onclick="showTab('menuTab')">Menu View</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="mapTab" class="tab-content">
+        <div id="map"></div>
+    </div>
+
+    <div id="menuTab" class="tab-content" style="display:none;">
+        <ul>
+            <li><button onclick="fetchTrends('norway')">Norway</button></li>
+            <li><button onclick="fetchTrends('united_states')">United States</button></li>
+            <li><button onclick="fetchTrends('brazil')">Brazil</button></li>
+            <li><button onclick="fetchTrends('france')">France</button></li>
+            <li><button onclick="fetchTrends('germany')">Germany</button></li>
+            <li><button onclick="fetchTrends('china')">China</button></li>
+            <li><button onclick="fetchTrends('india')">India</button></li>
+            <li><button onclick="fetchTrends('australia')">Australia</button></li>
+            <li><button onclick="fetchTrends('south_korea')">South Korea</button></li>
+            <li><button onclick="fetchTrends('united_kingdom')">United Kingdom</button></li>
+            <li><button onclick="fetchTrends('south_africa')">South Africa</button></li>
+            <li><button onclick="fetchTrends('canada')">Canada</button></li>
+            <li><button onclick="fetchTrends('mexico')">Mexico</button></li>
+            <li><button onclick="fetchTrends('spain')">Spain</button></li>
+            <li><button onclick="fetchTrends('italy')">Italy</button></li>
+            <li><button onclick="fetchTrends('japan')">Japan</button></li>
+        </ul>
+    </div>
+
     <!-- Seksjon som inneholder trender og kartet -->
 
     <section class="trendsContainer">
