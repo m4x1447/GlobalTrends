@@ -22,11 +22,17 @@ const canadaMarker = L.marker([56.1304, -106.3468]).addTo(map).bindPopup("Canada
 const indiaMarker = L.marker([20.5937, 78.9629]).addTo(map).bindPopup("India");
 const italyMarker = L.marker([41.9028, 12.4964]).addTo(map).bindPopup("Italy");
 
+<<<<<<< HEAD
 // Klikk-hendelser for markører som henter trender for det spesifikke landet
 norwayMarker.on('click', () => {
     showCountrySection(); // Viser flagget for det valgte landet
     fetchTrends('norway'); // Henter trender for Norge
 })
+=======
+
+// Marker click handlers
+norwayMarker.on('click', () => fetchTrends('norway'));
+>>>>>>> 2570ddc50f63cce0e2b6270af0b12c88348940d2
 germanyMarker.on('click', () => fetchTrends('germany'));
 franceMarker.on('click', () => fetchTrends('france'));
 usaMarker.on('click', () => fetchTrends('united_states'));
