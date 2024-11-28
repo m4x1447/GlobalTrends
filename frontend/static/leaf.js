@@ -24,10 +24,7 @@ const italyMarker = L.marker([41.9028, 12.4964]).addTo(map).bindPopup("Italy");
 
 
 // Marker click handlers
-norwayMarker.on('click', () => {
-    showCountrySection();
-    fetchTrends('norway');
-})
+norwayMarker.on('click', () => fetchTrends('norway'));
 germanyMarker.on('click', () => fetchTrends('germany'));
 franceMarker.on('click', () => fetchTrends('france'));
 usaMarker.on('click', () => fetchTrends('united_states'));
