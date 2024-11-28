@@ -57,20 +57,3 @@ li {
     border: 1px red solid;
     height: 1vh;
 }
-
-.countryFlag {
-    padding: 5px;
-    background-color: #2e2e2e;
-    border-top: 1px solid #3b3b3b;
-    height: 20vh;
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    background-size: cover;
-}
-
-.countryFlag img{
-    border-radius: 8px;
-    height: 100%;
-    width: 100%;
-}
