@@ -52,3 +52,8 @@ function showTab(tabId) {
     buttons.forEach(button => button.classList.remove('active'));
     event.target.classList.add('active');
 }
+
+
+function hoverFunction() {
+    fetchTrends('norway'); 
+}

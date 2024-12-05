@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Searches in Norway</title>
 
@@ -14,16 +14,30 @@
 </head>
 
 <body>
-    <div>
+    <div style="margin-bottom: 20px;">
         <!-- Buttons for switching tabs -->
         <button class="tab-button" onclick="showTab('mapTab')">Map View</button>
         <button class="tab-button" onclick="showTab('menuTab')">Menu View</button>
     </div>
 
     <!-- Tab Content -->
-    <div id="mapTab" class="tab-content">
-        <div id="map"></div>
-    </div>
+
+    <section class="trendsContainer">
+        <div id="trendsResults" class="trendsResults">
+            <h1 style="color: white;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
+            <ul>
+                <!-- Flaskekode som viser trender i en liste -->
+                {% for trend in trends %}
+                <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Kartseksjon -->
+        <div id="mapTab" class="tab-content">
+            <div id="map"></div>
+        </div>
+    </section>
 
     <div id="menuTab" class="tab-content" style="display:none;">
         <ul>
@@ -44,24 +58,85 @@
             <li><button onclick="fetchTrends('italy')">Italy</button></li>
             <li><button onclick="fetchTrends('japan')">Japan</button></li>
         </ul>
+
+        <div class="content">
+            <h1 class="heading">Country Card Flip</h1>
+            <p class="description">Hover over a card to to see current trends!</p><a class="card" href="#!">
+                <div class="front" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/1200px-Flag_of_Norway.svg.png)">
+                    <p>Norway</p>
+                </div>
+                <div class="back" onmouseover="hoverFunction()">
+                    <div>
+                        <ul>
+                            <!-- Flaskekode som viser trender i en liste -->
+                            {% for trend in trends %}
+                            <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </a><a class="card" href="#!">
+                <div class="front" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/2560px-Flag_of_Brazil.svg.png)">
+                    <p>Brazil</p>
+                </div>
+                <div class="back">
+                    <div>
+                        {% for trend in trends %}
+                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                        {% endfor %}
+                    </div>
+                </div>
+            </a><a class="card" href="#!">
+                <div class="front" style="background-image: url(https://cdn.britannica.com/79/4479-050-6EF87027/flag-Stars-and-Stripes-May-1-1795.jpg)">
+                    <p>United States</p>
+                </div>
+                <div class="back">
+                    <div>
+                        {% for trend in trends %}
+                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                        {% endfor %}
+                    </div>
+                </div>
+            </a><a class="card" href="#!">
+                <div class="front" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Flag_of_Sweden.svg/1200px-Flag_of_Sweden.svg.png)">
+                    <p>Sweden</p>
+                </div>
+                <div class="back">
+                    <div>
+                        {% for trend in trends %}
+                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                        {% endfor %}
+                    </div>
+                </div>
+            </a><a class="card" href="#!">
+                <div class="front" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1280px-Flag_of_Germany.svg.png)">
+                    <p>Germany</p>
+                </div>
+                <div class="back">
+                    <div>
+                        {% for trend in trends %}
+                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                        {% endfor %}
+                    </div>
+                </div>
+            </a><a class="card" href="#!">
+                <div class="front" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/1280px-Flag_of_the_Netherlands.svg.png)">
+                    <p>Netherlands</p>
+                </div>
+                <div class="back">
+                    <div>
+                        {% for trend in trends %}
+                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                        {% endfor %}
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 
     <!-- Seksjon som inneholder trender og kartet -->
 
-    <section class="trendsContainer">
-        <div id="trendsResults" class="trendsResults">
-            <h1 style="color: white;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
-            <ul>
-                <!-- Flaskekode som viser trender i en liste -->
-                {% for trend in trends %}
-                <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
-                {% endfor %}
-            </ul>
-        </div>
 
-        <!-- Kartseksjon -->
-        <div id="map"></div>
-    </section>
 
     <section class="countryTimer">
     </section>
