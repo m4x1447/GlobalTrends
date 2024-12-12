@@ -65,15 +65,14 @@
                 <div class="front" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/1200px-Flag_of_Norway.svg.png)">
                     <p>Norway</p>
                 </div>
-                <div class="back" onmouseover="hoverFunction()">
-                    <div>
-                        <ul>
-                            <!-- Flaskekode som viser trender i en liste -->
-                            {% for trend in trends %}
-                            <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
-                            {% endfor %}
-                        </ul>
-                    </div>
+                <div class="back"  onmouseover="hoverFunction()">
+                    <h1 style="color: black; font-size: 1rem;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
+                    <ul>
+                        <!-- Flaskekode som viser trender i en liste -->
+                        {% for trend in trends %}
+                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                        {% endfor %}
+                    </ul>
                 </div>
             </a><a class="card" href="#!">
                 <div class="front" style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/2560px-Flag_of_Brazil.svg.png)">

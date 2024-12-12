@@ -266,13 +266,12 @@ li {
 
 .front:before {
     position: absolute;
-    display: block;
+    display: block; 
     content: "";
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, #1a9be6, #1a57e6);
     opacity: 0.25;
     z-index: -1;
 }
