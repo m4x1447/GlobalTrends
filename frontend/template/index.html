@@ -14,10 +14,13 @@
 </head>
 
 <body>
-    <div style="margin-bottom: 20px;">
+    <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
         <!-- Buttons for switching tabs -->
         <button class="tab-button" onclick="showTab('mapTab')">Map View</button>
         <button class="tab-button" onclick="showTab('menuTab')">Menu View</button>
+        <div class="checkbox-wrapper-2">
+            <input type="checkbox" class="sc-gJwTLC ikxBAC" id="country-toggle">
+          </div>
     </div>
 
     <!-- Tab Content -->
@@ -138,6 +141,7 @@
 
 
     <section class="countryTimer">
+        <p>Changing country in 20 seconds.</p>
     </section>
 
     <!-- Leaflet JS (ekstern CDN) for kartfunksjonalitet -->

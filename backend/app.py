@@ -6,8 +6,6 @@ import os
 print("Template Folder Exists:", os.path.exists('../frontend/template'))
 print("Static Folder Exists:", os.path.exists('../frontend/static'))
 
-
-
 # Initialize Flask
 app = Flask(__name__, 
             template_folder='../frontend/template',
