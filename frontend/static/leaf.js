@@ -166,3 +166,4 @@ function showTab(tabId) {
 function hoverFunction() {
     fetchTrends('norway');
 }
+
