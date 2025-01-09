@@ -20,7 +20,7 @@
         <button class="tab-button" onclick="showTab('menuTab')">Menu View</button>
         <div class="checkbox-wrapper-2">
             <input type="checkbox" class="sc-gJwTLC ikxBAC" id="country-toggle">
-          </div>
+        </div>
     </div>
 
     <!-- Tab Content -->
@@ -29,12 +29,20 @@
         <div id="trendsResults" class="trendsResults">
             <h1 style="color: white;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
             <ul>
-                <!-- Flaskekode som viser trender i en liste -->
+                <!-- Flask loop to display trends -->
                 {% for trend in trends %}
-                <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
+                <li>
+                    <span class="trend-text">{{ trend }}</span>  <!-- Trend text -->
+                    <a id="popup" href="#" onclick="showTrendInfo(event, '{{ trend }}')">
+                        <span class="info-icon"></span>
+                    </a>
+                      
+                </li>
                 {% endfor %}
             </ul>
         </div>
+
+
 
         <!-- Kartseksjon -->
         <div id="mapTab" class="tab-content">
@@ -139,10 +147,7 @@
     <!-- Seksjon som inneholder trender og kartet -->
 
 
-
-    <section class="countryTimer">
-        <p>Changing country in 20 seconds.</p>
-    </section>
+    <div id="progress-line"></div>
 
     <!-- Leaflet JS (ekstern CDN) for kartfunksjonalitet -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
