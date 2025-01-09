@@ -119,6 +119,7 @@ function startCyclingCountries() {
       // Oppdater indeks for neste land
       currentCountryIndex = (currentCountryIndex + 1) % countries.length; // Loop tilbake til starten
     }
+    document.getElementById("progress-line").style.display = "block";
   
     // Kjør første bytte umiddelbart
     cycleCountry();
@@ -128,13 +129,12 @@ function startCyclingCountries() {
 }
 // Function to stop cycling through countries
 function stopCyclingCountries() {
+    document.getElementById("progress-line").style.display = "none";
     clearInterval(cycleInterval); // Stopp intervallet
     cycleInterval = null; // Tilbakestill intervallet
     currentCountryIndex = 0; // Tilbakestill til første land
   
-    // Reset linjen til full bredde
-    progressLine.style.transition = 'none';
-    progressLine.style.width = '100%';
+    
 }
 
 // Event listener for the checkbox
@@ -159,11 +159,5 @@ function showTab(tabId) {
     const buttons = document.querySelectorAll('.tab-button');
     buttons.forEach(button => button.classList.remove('active'));
     event.target.classList.add('active');
-}
-
-// norwayMarker.on('click', () => fetchTrends('norway'));
-
-function hoverFunction() {
-    fetchTrends('norway');
 }
 
