@@ -1,14 +1,30 @@
 // Initialiserer kartet og setter senter og zoom-nivå
 const map = L.map('map', {
-    center: [20, 0],  // Map center coordinates
-    zoom: 2.2,          // Initial zoom level
-    minZoom: 2.2,       // Minimum zoom-out level
-    maxZoom: 5       // Maximum zoom-in level
-  });
-// Legger til et lag med kartdata fra OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-}).addTo(map);
+    center: [20, 0], // Center the map (latitude, longitude)
+    zoom: 2          // Set initial zoom level
+});
+
+  // Light mode tile layer
+const lightMode = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+});
+
+  // Dark mode tile layer
+const darkMode = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.carto.com/">Carto</a>',
+    subdomains: 'abcd'
+});
+
+  // Add the default layer (light mode)
+lightMode.addTo(map);
+
+  // Add a layer control to toggle between light and dark modes
+const baseMaps = {
+    "Light Mode": lightMode,
+    "Dark Mode": darkMode
+};
+
+L.control.layers(baseMaps).addTo(map);
 
 // dark map option idea
 //L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {

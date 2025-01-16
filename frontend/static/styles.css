@@ -182,7 +182,7 @@ li {
     height: 100%;
 
     margin: 0;
-    padding: 80px 0;
+    padding: 80px 20px;
 
     list-style: none;
 
@@ -647,6 +647,8 @@ body.dark-mode {
     display: inline-block;
     width: 60px;
     height: 34px;
+    max-width: 60px;
+    min-width: 60px;
 }
 
 .theme-toggle input {
@@ -685,4 +687,10 @@ body.dark-mode {
 
 .theme-toggle input:checked+.slider:before {
     transform: translateX(26px);
+}
+
+.cm-div {
+    margin-top: 10px; 
+    display: flex;
+    gap: 8px;
 }
