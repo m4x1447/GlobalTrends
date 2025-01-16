@@ -1,11 +1,22 @@
 // Initialiserer kartet og setter senter og zoom-nivå
-const map = L.map('map').setView([60.472, 8.4689], 5); // Sentrert på Norge for enkelhets skyld
-
+const map = L.map('map', {
+    center: [20, 0],  // Map center coordinates
+    zoom: 2.2,          // Initial zoom level
+    minZoom: 2.2,       // Minimum zoom-out level
+    maxZoom: 5       // Maximum zoom-in level
+  });
 // Legger til et lag med kartdata fra OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '© OpenStreetMap contributors'
 }).addTo(map);
+
+// dark map option idea
+//L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+//    attribution: '&copy; <a href="https://www.carto.com/">Carto</a>',
+//    subdomains: 'abcd',
+//    maxZoom: 19
+//  }).addTo(map); 
+//
 
 const countries = [
     'argentina', 'australia', 'brazil', 'canada', 'france', 'germany', 

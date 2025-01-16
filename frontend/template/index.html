@@ -25,10 +25,27 @@
         <!-- Buttons for switching tabs -->
         <button class="tab-button" onclick="showTab('mapTab')">Map View</button>
         <button class="tab-button" onclick="showTab('menuTab')">Menu View</button>
-        <div class="checkbox-wrapper-2">
+        <!--<div class="checkbox-wrapper-2">
             <input type="checkbox" class="sc-gJwTLC ikxBAC" id="country-toggle">
-        </div>
+        </div>-->
+        <div class="hamburger-menu">
+            <input id="menu__toggle" type="checkbox" />
+            <label class="menu__btn" for="menu__toggle">
+              <span></span>
+            </label>
+        
+            <ul class="menu__box">
+                <div style="margin: 10px;">
+                    <label class="theme-toggle">
+                        <input type="checkbox" id="theme-switch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </ul>
+        </div>  
     </div>
+
+
 
     <!-- Tab Content -->
 
@@ -43,7 +60,7 @@
                     <a id="popup" href="#" onclick="showTrendInfo(event, '{{ trend }}')">
                         <span class="info-icon"></span>
                     </a>
-                      
+ 
                 </li>
                 {% endfor %}
             </ul>
