@@ -33,7 +33,16 @@ function showTrendInfo(event, trend) {
       `width=${popupWidth},height=${popupHeight},top=${top},left=${left},resizable=yes,scrollbars=yes`
     );
   }
-  
+  // Toggling the hamburger menu
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('nav-links');
+
+// Toggle the menu and change the icon
+hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    hamburger.classList.toggle('active');
+});
+
 
 
   const themeSwitch = document.getElementById('theme-switch');
@@ -54,3 +63,8 @@ themeSwitch.addEventListener('change', () => {
         localStorage.setItem('theme', 'light'); // Lagre valg i localStorage
     }
 });
+
+
+
+
+
