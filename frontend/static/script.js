@@ -34,18 +34,7 @@ function showTrendInfo(event, trend) {
     );
   }
   // Toggling the hamburger menu
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('nav-links');
-
-// Toggle the menu and change the icon
-hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    hamburger.classList.toggle('active');
-});
-
-
-
-  const themeSwitch = document.getElementById('theme-switch');
+const themeSwitch = document.getElementById('theme-switch');
 
 // Sjekk om brukeren har en tidligere valgt modus lagret
 if (localStorage.getItem('theme') === 'dark') {

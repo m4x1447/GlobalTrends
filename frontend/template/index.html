@@ -14,13 +14,6 @@
 </head>
 
 <body>
-    <div style="margin: 10px;">
-        <label class="theme-toggle">
-            <input type="checkbox" id="theme-switch">
-            <span class="slider"></span>
-        </label>
-    </div>
-    
     <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
         <!-- Buttons for switching tabs -->
         <button class="tab-button" onclick="showTab('mapTab')">Map View</button>
@@ -54,13 +47,11 @@
         </div>
     </div>
 
-
-
     <!-- Tab Content -->
 
     <section class="trendsContainer">
         <div id="trendsResults" class="trendsResults">
-            <h1 style="color: white;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
+            <h1 style="color: black;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
             <ul>
                 <!-- Flask loop to display trends -->
                 {% for trend in trends %}
@@ -74,8 +65,6 @@
                 {% endfor %}
             </ul>
         </div>
-
-
 
         <!-- Kartseksjon -->
         <div id="mapTab" class="tab-content">
@@ -113,7 +102,7 @@
                     <p>Norway</p>
                 </div>
                 <div class="back" onmouseover="hoverFunction()">
-                    <h1 style="color: black; font-size: 1rem;">Current Trending Searches in Norway</h1>
+                    <h1 style="color: black; font-size: 1rem;" >Current Trending Searches in Norway</h1>
                     <!-- Tittel som viser trender i Norge -->
                     <ul>
                         <!-- Flaskekode som viser trender i en liste -->
