@@ -35,20 +35,27 @@ function showTrendInfo(event, trend) {
   }
   // Toggling the hamburger menu
 const themeSwitch = document.getElementById('theme-switch');
+var menu__box = document.getElementById("menu__box");
 
 // Sjekk om brukeren har en tidligere valgt modus lagret
 if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
+    menu__box.classList.add("dark-mode");
     themeSwitch.checked = true;
 }
 
 // Legg til en event listener for å bytte modus
+
+
+
 themeSwitch.addEventListener('change', () => {
     if (themeSwitch.checked) {
         document.body.classList.add('dark-mode');
+        menu__box.classList.add("dark-mode");
         localStorage.setItem('theme', 'dark'); // Lagre valg i localStorage
     } else {
         document.body.classList.remove('dark-mode');
+        menu__box.classList.remove("dark-mode");
         localStorage.setItem('theme', 'light'); // Lagre valg i localStorage
     }
 });

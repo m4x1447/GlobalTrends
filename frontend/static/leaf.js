@@ -1,7 +1,9 @@
 // Initialiserer kartet og setter senter og zoom-nivå
 const map = L.map('map', {
     center: [20, 0], // Center the map (latitude, longitude)
-    zoom: 2          // Set initial zoom level
+    zoom: 3,               // Initial zoom level
+    maxZoom: 5.5,            // Maximum zoom level
+    minZoom: 1.5              // Minimum zoom level
 });
 
   // Light mode tile layer

@@ -4,10 +4,27 @@
     box-sizing: border-box;
 }
 
-html::-webkit-scrollbar {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #F5F5F5;
-    border-radius: 10px;
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    border-radius: 4px;
+    background: #555;
 }
 
 /* Basic page styling */
@@ -128,7 +145,7 @@ li {
     transform: rotate(90deg);
 }
 
-#menu__toggle:checked~.menu__box {
+#menu__toggle:checked~#menu__box {
     visibility: visible;
     right: 0;
     /* Move the menu box into view from the right */
@@ -170,27 +187,24 @@ li {
     top: 8px;
 }
 
-.menu__box {
+#menu__box {
     display: block;
     position: fixed;
     visibility: hidden;
     top: 0;
     right: -100%;
-    /* Move the menu box out of view on the right */
-
     width: 300px;
     height: 100%;
-
     margin: 0;
     padding: 80px 20px;
-
     list-style: none;
-
     background-color: #ECEFF1;
     box-shadow: -1px 0px 6px rgba(0, 0, 0, .2);
-    /* Shadow on the left */
-
     transition-duration: .25s;
+}
+
+#menu__box.dark-mode {
+    background-color: var(--menu_box-color2);
 }
 
 .menu__item {
@@ -635,11 +649,14 @@ button:hover {
 }
 
 body.dark-mode {
+    --menu_box-color2: #262626;
     --background-color: #131416;
     --text-color: white;
     --button-bg: #333;
     --button-text: white;
 }
+
+
 
 /* Styling for toggle switch */
 .theme-toggle {
@@ -689,7 +706,7 @@ body.dark-mode {
     transform: translateX(26px);
 
 }
- 
+
 
 
 /* Styling for the topnav */
@@ -728,7 +745,25 @@ body.dark-mode {
 
 
 .cm-div {
-    margin-top: 10px; 
+    margin-top: 10px;
     display: flex;
     gap: 8px;
 }
+
+@media screen and (max-width: 768px) {
+    .trendsContainer {
+        display: block;
+    }
+
+    .trendsResults {
+        width: 100%;
+    }
+
+    .tab-content {
+        width: 100%;
+    }
+
+    #menu__box {
+        width: 100%;
+    }
+  }

@@ -16,10 +16,10 @@
 <body>
     <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
         <!-- Buttons for switching tabs -->
-        <button class="tab-button" onclick="showTab('mapTab')">Map View</button>
-        <button class="tab-button" onclick="showTab('menuTab')">Menu View</button>
+        <button class="tab-button" onclick="showTab('mapTab')" title="Get Trends With Map">Map View</button>
+        <button class="tab-button" onclick="showTab('menuTab')" title="Get Trends Without Map">Interactive View</button>
         <!--<div class="checkbox-wrapper-2">
-            <input type="checkbox" class="sc-gJwTLC ikxBAC" id="country-toggle">
+            <input type="checkbox" class="sc-gJwTLC ikxBAC" id="country-toggle">    
         </div>-->
         <div class="hamburger-menu" style="z-index: 1000;">
             <input id="menu__toggle" type="checkbox" />
@@ -27,9 +27,9 @@
                 <span></span>
             </label>
             <!--Innhold in sidemenu-->
-            <ul class="menu__box">
+            <ul class="" id="menu__box">
                 <h2>Settings</h2>
-                <div class="cm-div">
+                <div class="cm-div" title="Toggle darkmode">
                     <label class="theme-toggle">
                         <input type="checkbox" id="theme-switch">
                         <span class="slider"></span>
