@@ -90,7 +90,7 @@ li {
 }
 
 .tab-button.active {
-    background-color: #7c7777;
+    background-color: #ece2e2;
 }
 
 /* Tab-innhold */
@@ -143,7 +143,7 @@ li {
     width: 26px;
     height: 26px;
     cursor: pointer;
-    z-index: 1;
+    z-index: 500;
 }
 
 .menu__btn>span,
@@ -687,6 +687,47 @@ body.dark-mode {
 
 .theme-toggle input:checked+.slider:before {
     transform: translateX(26px);
+
+}
+ 
+
+
+/* Styling for the topnav */
+.topnav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    position: relative;
+}
+
+.topnav .logo a {
+    font-size: 24px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.topnav .nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.topnav .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.topnav .nav-links a:hover {
+    color: #00bcd4;
+}
+
+
+
 }
 
 .cm-div {

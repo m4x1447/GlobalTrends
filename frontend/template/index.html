@@ -14,8 +14,13 @@
 </head>
 
 <body>
-
-
+    <div style="margin: 10px;">
+        <label class="theme-toggle">
+            <input type="checkbox" id="theme-switch">
+            <span class="slider"></span>
+        </label>
+    </div>
+    
     <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
         <!-- Buttons for switching tabs -->
         <button class="tab-button" onclick="showTab('mapTab')">Map View</button>
@@ -182,8 +187,6 @@
     </div>
 
     <!-- Seksjon som inneholder trender og kartet -->
-
-
     <div id="progress-line" style="display: none;"></div>
 
     <!-- Leaflet JS (ekstern CDN) for kartfunksjonalitet -->
@@ -193,6 +196,7 @@
     <!-- Lokale JavaScript-filer -->
     <script src="{{ url_for('static', filename='leaf.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 
 </html>
