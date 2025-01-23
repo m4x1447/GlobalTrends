@@ -6,12 +6,10 @@ const map = L.map('map', {
 
   // Light mode tile layer
 const lightMode = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
 });
 
   // Dark mode tile layer
 const darkMode = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.carto.com/">Carto</a>',
     subdomains: 'abcd'
 });
 

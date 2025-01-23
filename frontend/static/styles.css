@@ -635,7 +635,7 @@ button:hover {
 }
 
 body.dark-mode {
-    --background-color: black;
+    --background-color: #131416;
     --text-color: white;
     --button-bg: #333;
     --button-text: white;
