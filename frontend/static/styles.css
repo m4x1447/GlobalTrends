@@ -114,6 +114,10 @@ li {
 .tab-content {
     width: 80%;
 }
+.tabmeny{
+    width: 20%;
+    display: flex;
+}
 
 /* Styling for Map tab */
 #map-tab {
