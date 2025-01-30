@@ -59,7 +59,7 @@ def get_trends():
         return jsonify({'error': 'Failed to fetch trends'}), 500
 
 #Linking til HTML siden via FLASK server.
-@app.route('/index')
+@app.route('/')
 def index():
     return render_template('index.html')
 # Custom 404 Error Page
