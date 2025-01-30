@@ -61,6 +61,3 @@ themeSwitch.addEventListener('change', () => {
 });
 
 
-
-
-

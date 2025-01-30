@@ -6,44 +6,35 @@ const map = L.map('map', {
     minZoom: 1.5              // Minimum zoom level
 });
 
-  // Light mode tile layer
+// Light mode tile layer
 const lightMode = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 });
 
-  // Dark mode tile layer
+// Dark mode tile layer
 const darkMode = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     subdomains: 'abcd'
 });
 
-  // Add the default layer (light mode)
+// Add the default layer (light mode)
 lightMode.addTo(map);
 
-  // Add a layer control to toggle between light and dark modes
+// Add a layer control to toggle between light and dark modes
 const baseMaps = {
     "Light Mode": lightMode,
     "Dark Mode": darkMode
 };
-
 L.control.layers(baseMaps).addTo(map);
 
-// dark map option idea
-//L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-//    attribution: '&copy; <a href="https://www.carto.com/">Carto</a>',
-//    subdomains: 'abcd',
-//    maxZoom: 19
-//  }).addTo(map); 
-//
-
 const countries = [
-    'argentina', 'australia', 'brazil', 'canada', 'france', 'germany', 
-    'india', 'italy', 'japan', 'mexico', 'netherlands', 'new_zealand', 
+    'argentina', 'australia', 'brazil', 'canada', 'france', 'germany',
+    'india', 'italy', 'japan', 'mexico', 'netherlands', 'new_zealand',
     'norway', 'spain', 'sweden', 'united_kingdom', 'united_states'
 ];
 
 const progressLine = document.getElementById('progress-line');
-
 let currentCountryIndex = 0;
 let cycleInterval = null; // To store the interval ID for cycling countries
+let automaticZoomEnabled = false;
 
 
 // Legger til markører for land på kartet
@@ -67,12 +58,42 @@ const markers = {
     'united_states': L.marker([37.0902, -95.7129]).addTo(map).bindPopup("United States")
 };
 
+const countryCoordinates = {
+    'argentina': { lat: -38.4161, lon: -63.6167, zoom: 4 },
+    'australia': { lat: -25.2744, lon: 133.7751, zoom: 4 },
+    'brazil': { lat: -14.2350, lon: -51.9253, zoom: 4 },
+    'canada': { lat: 56.1304, lon: -106.3468, zoom: 4 },
+    'france': { lat: 46.6034, lon: 1.8883, zoom: 5 },
+    'germany': { lat: 51.1657, lon: 10.4515, zoom: 5 },
+    'india': { lat: 20.5937, lon: 78.9629, zoom: 5 },
+    'italy': { lat: 41.8719, lon: 12.5674, zoom: 5 },
+    'japan': { lat: 36.2048, lon: 138.2529, zoom: 5 },
+    'mexico': { lat: 23.6345, lon: -102.5528, zoom: 5 },
+    'netherlands': { lat: 52.3676, lon: 4.9041, zoom: 6 },
+    'new_zealand': { lat: -40.9006, lon: 174.8860, zoom: 5 },
+    'norway': { lat: 60.4720, lon: 8.4689, zoom: 5 },
+    'spain': { lat: 40.4637, lon: -3.7492, zoom: 5 },
+    'sweden': { lat: 60.1282, lon: 18.6435, zoom: 5 },
+    'united_kingdom': { lat: 55.3781, lon: -3.4360, zoom: 5 },
+    'united_states': { lat: 37.0902, lon: -95.7129, zoom: 4 }
+};
+
 // Add click event listeners for all markers
 for (let country in markers) {
-    const marker = markers[country];
-    marker.on('click', () => fetchTrends(country));
+    markers[country].on('click', () => {
+        fetchTrends(country);
+        if (autoZoomEnabled) {
+            updateMapLocation(country);
+        }
+    });
 }
-  
+
+function updateMapLocation(country) {
+    if (autoZoomEnabled && countryCoordinates[country]) {
+        const { lat, lon, zoom } = countryCoordinates[country];
+        map.setView([lat, lon], zoom);
+    }
+}
 
 // Funksjon for å hente trender fra API-et
 function fetchTrends(country) {
@@ -86,16 +107,16 @@ function fetchTrends(country) {
             } else {
                 const trendsResults = document.getElementById('trendsResults');
                 trendsResults.innerHTML = `
-                    <h2>Trending Searches in ${country.charAt(0).toUpperCase() + country.slice(1)}</h2>
-                    <ul>
-                        ${data.trends.map(trend => `
-                            <li>
-                                ${trend} 
-                                <span class="info-icon" onclick="showTrendInfo(event, '${trend}')">🅘</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                `;
+                        <h2>Trending Searches in ${country.charAt(0).toUpperCase() + country.slice(1)}</h2>
+                        <ul>
+                            ${data.trends.map(trend => `
+                                <li>
+                                    ${trend} 
+                                    <span class="info-icon" onclick="showTrendInfo(event, '${trend}')">🅘</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `;
             }
         })
         .catch(err => console.error('Error fetching trends:', err)); // Håndterer eventuelle feil som skjer under henting av trender
@@ -126,46 +147,40 @@ function showTrendInfo(event, trend) {
 
 
 function startCyclingCountries() {
+    autoZoomEnabled = true;
     function cycleCountry() {
-      // Hent nåværende land
-      const country = countries[currentCountryIndex];
-  
-      // Hent trender for landet
-      fetchTrends(country);
-  
-      // Reset linjen
-      progressLine.style.transition = 'none'; // Deaktiver overgang for umiddelbar reset
-      progressLine.style.width = '100%'; // Sett tilbake til full bredde
-  
-      // Start animasjonen
-      setTimeout(() => {
-        progressLine.style.transition = 'width 5s linear'; // Aktiver overgang
-        progressLine.style.width = '0%'; // Krymp linjen til 0%
-      }, 50); // Kort forsinkelse for å tillate reset
-  
-      // Oppdater indeks for neste land
-      currentCountryIndex = (currentCountryIndex + 1) % countries.length; // Loop tilbake til starten
+        const country = countries[currentCountryIndex];
+        
+        // Move updateMapLocation here so it always updates, even if fetch fails
+        updateMapLocation(country); 
+        
+        fetchTrends(country);
+
+        progressLine.style.transition = 'none';
+        progressLine.style.width = '100%';
+        setTimeout(() => {
+            progressLine.style.transition = 'width 5s linear';
+            progressLine.style.width = '0%';
+        }, 50);
+
+        currentCountryIndex = (currentCountryIndex + 1) % countries.length;
     }
+
     document.getElementById("progress-line").style.display = "block";
-  
-    // Kjør første bytte umiddelbart
     cycleCountry();
-  
-    // Sett opp intervall for påfølgende bytter
-    cycleInterval = setInterval(cycleCountry, 5800); // Bytt land hvert 5. sekund
+    cycleInterval = setInterval(cycleCountry, 5800);
 }
 // Function to stop cycling through countries
 function stopCyclingCountries() {
+    autoZoomEnabled = false;
     document.getElementById("progress-line").style.display = "none";
-    clearInterval(cycleInterval); // Stopp intervallet
-    cycleInterval = null; // Tilbakestill intervallet
-    currentCountryIndex = 0; // Tilbakestill til første land
-  
-    
+    clearInterval(cycleInterval);
+    cycleInterval = null;
+    currentCountryIndex = 0;
 }
 
 // Event listener for the checkbox
-document.getElementById('country-toggle').addEventListener('change', function() {
+document.getElementById('country-toggle').addEventListener('change', function () {
     if (this.checked) {
         startCyclingCountries(); // Start cycling countries when checkbox is checked
     } else {
@@ -178,10 +193,10 @@ function showTab(tabId) {
     // Skjuler alle tab-innhold
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => tab.style.display = 'none');
-    
+
     // Vist valgt tab
     document.getElementById(tabId).style.display = 'block';
-    
+
     // Aktivere riktig knapp
     const buttons = document.querySelectorAll('.tab-button');
     buttons.forEach(button => button.classList.remove('active'));
