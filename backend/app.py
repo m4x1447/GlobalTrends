@@ -27,9 +27,7 @@ VALID_COUNTRIES = {
     'japan': 'JP',      # Japan
     'mexico': 'MX',     # Mexico
     'netherlands': 'NL',# Netherlands
-    'new_zealand': 'NZ',# New Zealand
     'norway': 'NO',     # Norway
-    'spain': 'ES',      # Spain
     'sweden': 'SE',     # Sweden
     'united_kingdom': 'GB',  # United Kingdom (UK)
     'united_states': 'US'    # United States
