@@ -17,7 +17,7 @@
     <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
         <!-- Knapper for å bytte mellom faner -->
         <button class="tab-button" onclick="showTab('mapTab')" title="Get Trends With Map">Map View</button>
-        <button class="tab-button" onclick="showTab('menuTab')" title="Get Trends Without Map">Interactive View</button>
+        <a class="tab-button" href="{{ url_for('interactive') }}">Interactive View</a>
         <a class="tab-button" href="{{ url_for('card') }}">Card View</a>
         
        
