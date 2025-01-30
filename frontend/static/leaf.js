@@ -141,6 +141,15 @@ function showTrendInfo(event, trend) {
     });
 }
 
+// Event listener for the checkbox
+document.getElementById('country-toggle').addEventListener('change', function () {
+    if (this.checked) {
+        startCyclingCountries(); // Start cycling countries when checkbox is checked
+    } else {
+        stopCyclingCountries(); // Stop cycling when checkbox is unchecked
+    }
+});
+
 
 function startCyclingCountries() {
     autoZoomEnabled = true;
@@ -175,14 +184,6 @@ function stopCyclingCountries() {
     currentCountryIndex = 0;
 }
 
-// Event listener for the checkbox
-document.getElementById('country-toggle').addEventListener('change', function () {
-    if (this.checked) {
-        startCyclingCountries(); // Start cycling countries when checkbox is checked
-    } else {
-        stopCyclingCountries(); // Stop cycling when checkbox is unchecked
-    }
-});
 
 // Funksjon for å bytte mellom Map og Menu
 function showTab(tabId) {
