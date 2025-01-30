@@ -66,6 +66,10 @@ def get_trends():
 def page_not_found(e):
     return render_template('404.html'), 404
 
+@app.route('/card')
+def card():
+    return render_template('card.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
 

@@ -18,10 +18,9 @@
         <!-- Knapper for å bytte mellom faner -->
         <button class="tab-button" onclick="showTab('mapTab')" title="Get Trends With Map">Map View</button>
         <button class="tab-button" onclick="showTab('menuTab')" title="Get Trends Without Map">Interactive View</button>
+        <a class="tab-button" href="{{ url_for('card') }}">Card View</a>
         
        
-
-
         <!-- Hamburger-meny for innstillinger -->
         <div class="hamburger-menu" style="z-index: 1000;">
             <input id="menu__toggle" type="checkbox" />
