@@ -27,8 +27,8 @@ L.control.layers(baseMaps).addTo(map);
 
 const countries = [
     'argentina', 'australia', 'brazil', 'canada', 'france', 'germany',
-    'india', 'italy', 'japan', 'mexico', 'netherlands', 'new_zealand',
-    'norway', 'spain', 'sweden', 'united_kingdom', 'united_states'
+    'india', 'italy', 'japan', 'mexico', 'netherlands',
+    'norway', 'sweden', 'united_kingdom', 'united_states'
 ];
 
 const progressLine = document.getElementById('progress-line');
@@ -50,9 +50,7 @@ const markers = {
     'japan': L.marker([36.2048, 138.2529]).addTo(map).bindPopup("Japan"),
     'mexico': L.marker([23.6345, -102.5528]).addTo(map).bindPopup("Mexico"),
     'netherlands': L.marker([52.3676, 4.9041]).addTo(map).bindPopup("Netherlands"),
-    'new_zealand': L.marker([-40.9006, 174.8860]).addTo(map).bindPopup("New Zealand"),
     'norway': L.marker([60.4720, 8.4689]).addTo(map).bindPopup("Norway"),
-    'spain': L.marker([40.4637, -3.7492]).addTo(map).bindPopup("Spain"),
     'sweden': L.marker([60.1282, 18.6435]).addTo(map).bindPopup("Sweden"),
     'united_kingdom': L.marker([55.3781, -3.4360]).addTo(map).bindPopup("United Kingdom"),
     'united_states': L.marker([37.0902, -95.7129]).addTo(map).bindPopup("United States")
@@ -70,9 +68,7 @@ const countryCoordinates = {
     'japan': { lat: 36.2048, lon: 138.2529, zoom: 5 },
     'mexico': { lat: 23.6345, lon: -102.5528, zoom: 5 },
     'netherlands': { lat: 52.3676, lon: 4.9041, zoom: 6 },
-    'new_zealand': { lat: -40.9006, lon: 174.8860, zoom: 5 },
-    'norway': { lat: 60.4720, lon: 8.4689, zoom: 5 },
-    'spain': { lat: 40.4637, lon: -3.7492, zoom: 5 },
+    'norway': { lat: 60.4720, lon: 8.4689, zoom: 5 }, 
     'sweden': { lat: 60.1282, lon: 18.6435, zoom: 5 },
     'united_kingdom': { lat: 55.3781, lon: -3.4360, zoom: 5 },
     'united_states': { lat: 37.0902, lon: -95.7129, zoom: 4 }
