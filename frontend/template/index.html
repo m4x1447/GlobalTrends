@@ -18,6 +18,9 @@
         <!-- Knapper for å bytte mellom faner -->
         <button class="tab-button" onclick="showTab('mapTab')" title="Get Trends With Map">Map View</button>
         <button class="tab-button" onclick="showTab('menuTab')" title="Get Trends Without Map">Interactive View</button>
+        
+       
+
 
         <!-- Hamburger-meny for innstillinger -->
         <div class="hamburger-menu" style="z-index: 1000;">
@@ -89,56 +92,8 @@
             <li><button onclick="fetchTrends('japan')">Japan</button></li>
         </ul>
 
-        <div class="content">
-            <h1 class="heading">Country Card Flip</h1>
-            <p class="description">Hover over a card to see current trends!</p>
-            <!-- Kort for hvert land -->
-            <a class="card" href="#!">
-                <div class="front"
-                    style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/1200px-Flag_of_Norway.svg.png)">
-                    <p>Norway</p>
-                </div>
-                <div class="back" onmouseover="hoverFunction()">
-                    <h1 style="color: black; font-size: 1rem;">Current Trending Searches in Norway</h1>
-                    <ul>
-                        <!-- Flask-løkke for å vise trender -->
-                        {% for trend in trends %}
-                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
-                        {% endfor %}
-                    </ul>
-                </div>
-            </a>
-            <!-- Gjenta for andre land -->
-            <a class="card" href="#!">
-                <div class="front"
-                    style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/2560px-Flag_of_Brazil.svg.png)">
-                    <p>Brazil</p>
-                </div>
-                <div class="back">
-                    <ul>
-                        {% for trend in trends %}
-                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
-                        {% endfor %}
-                    </ul>
-                </div>
-            </a>
-            <a class="card" href="#!">
-                <div class="front"
-                    style="background-image: url(https://cdn.britannica.com/79/4479-050-6EF87027/flag-Stars-and-Stripes-May-1-1795.jpg)">
-                    <p>United States</p>
-                </div>
-                <div class="back">
-                    <ul>
-                        {% for trend in trends %}
-                        <li>{{ trend }}</li> <!-- Hver trend vises som et punkt i listen -->
-                        {% endfor %}
-                    </ul>
-                </div>
-            </a>
-            <!-- Gjenta for flere land -->
-        </div>
-    </div>
-
+        
+    
     <!-- Progress linje (skjult som standard) -->
     <div id="progress-line" style="display: none;"></div>
 
