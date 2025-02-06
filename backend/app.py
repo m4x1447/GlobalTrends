@@ -1,6 +1,9 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, Response
 from pytrends.request import TrendReq
 import os
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+import io
 
 # Debugging: Check if the folders exist
 print("Template Folder Exists:", os.path.exists('../frontend/template'))
@@ -68,7 +71,7 @@ def get_trends():
         print(f"Error: {e}")
         return jsonify({'error': 'Failed to fetch trends'}), 500
 
-#Linking til HTML siden via FLASK server.
+# Link til HTML siden via FLASK server
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -87,6 +90,81 @@ def card():
 @app.route('/interactive')
 def interactive():
     return render_template('interactive.html')
+
+# WordCloud route - Fallback for generating image-based word cloud (old route)
+@app.route('/wordcloud')
+def wordcloud():
+    # Define which countries we want to get trends from
+    countries = ['united_states', 'united_kingdom', 'india', 'france', 'germany']
+    
+    # Store all the trends in a dictionary to create a word cloud
+    all_trends = {}
+    
+    for country in countries:
+        google_country_name = get_google_trends_country_name(country)
+        if google_country_name:
+            try:
+                trends_data = pytrends.trending_searches(pn=google_country_name)
+                if not trends_data.empty:
+                    for trend in trends_data[0].tolist():
+                        if trend in all_trends:
+                            all_trends[trend] += 1
+                        else:
+                            all_trends[trend] = 1
+            except Exception as e:
+                print(f"Error fetching trends for {country}: {e}")
+
+    # Generate the word cloud from the aggregated trends
+    wordcloud = WordCloud(
+        width=800,
+        height=400,
+        background_color="white",
+        colormap='coolwarm',
+        min_font_size=10,
+        max_font_size=100,
+        max_words=50,
+    ).generate_from_frequencies(all_trends)
+
+    # Save the word cloud image in memory (using BytesIO)
+    img = io.BytesIO()
+    wordcloud.to_image().save(img, format='PNG')
+    img.seek(0)
+
+    # Return the image as HTTP response
+    return Response(img, mimetype='image/png')
+
+# New route to fetch word cloud data as JSON for use in interactive cloud
+@app.route('/wordcloud-data')
+def wordcloud_data():
+    # Define which countries we want to get trends from
+    countries = ['united_states', 'united_kingdom', 'india', 'france', 'germany']
+    
+    # Store all the trends in a dictionary to create a word cloud
+    all_trends = {}
+    
+    for country in countries:
+        google_country_name = get_google_trends_country_name(country)
+        if google_country_name:
+            try:
+                trends_data = pytrends.trending_searches(pn=google_country_name)
+                if not trends_data.empty:
+                    for trend in trends_data[0].tolist():
+                        if trend in all_trends:
+                            all_trends[trend] += 1
+                        else:
+                            all_trends[trend] = 1
+            except Exception as e:
+                print(f"Error fetching trends for {country}: {e}")
+
+    # Return the trends as a list of (word, frequency) tuples for use in the word cloud
+    wordcloud_data = [{"text": word, "weight": weight} for word, weight in all_trends.items()]
+    
+    return jsonify(wordcloud_data)
+
+# New route to show the word cloud page
+@app.route('/wordcloud-view')
+def wordcloudview():
+    return render_template('wordcloudview.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

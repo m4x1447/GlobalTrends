@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordCloud View</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+
+    {% extends "templates.html" %}
+
+    {% block title %}WordCloud View{% endblock %}
+    
+    {% block content %}
+    <!-- Vis WordCloud-knapp -->
+    <div style="text-align: center;">
+        <h1>WordCloud</h1>
+        <button onclick="showWordCloud()">Vis WordCloud</button>
+        <div id="wordcloud-image" style="display: none; margin-top: 20px;">
+            <img src="{{ url_for('wordcloud') }}" alt="WordCloud Image">
+        </div>
+    </div>
+    
+    <script>
+        function showWordCloud() {
+            document.getElementById('wordcloud-image').style.display = 'block';
+        }
+    </script>
+    <script src="{{ url_for('static', filename='leaf.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% endblock %}
+    
+
+</body>
+</html>
