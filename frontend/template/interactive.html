@@ -16,5 +16,46 @@
 {% endblock %}
 
 
+    <section class="trendsContainer">
+        <div id="trendsResults" class="trendsResults">
+            <h1 style="color: black;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
+            <ul>
+                <!-- Flask-løkke for å vise trender -->
+                {% for trend in trends %}
+                <li>
+                    <span class="trend-text">{{ trend }}</span> <!-- Trend tekst -->
+                    <a id="popup" href="#" onclick="showTrendInfo(event, '{{ trend }}')">
+                        <span class="info-icon"></span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+    <ul>
+        <li><button onclick="fetchTrends('norway')">Norway</button></li>
+        <li><button onclick="fetchTrends('united_states')">United States</button></li>
+        <li><button onclick="fetchTrends('brazil')">Brazil</button></li>
+        <li><button onclick="fetchTrends('france')">France</button></li>
+        <li><button onclick="fetchTrends('germany')">Germany</button></li>
+        <li><button onclick="fetchTrends('china')">China</button></li>
+        <li><button onclick="fetchTrends('india')">India</button></li>
+        <li><button onclick="fetchTrends('australia')">Australia</button></li>
+        <li><button onclick="fetchTrends('south_korea')">South Korea</button></li>
+        <li><button onclick="fetchTrends('united_kingdom')">United Kingdom</button></li>
+        <li><button onclick="fetchTrends('south_africa')">South Africa</button></li>
+        <li><button onclick="fetchTrends('canada')">Canada</button></li>
+        <li><button onclick="fetchTrends('mexico')">Mexico</button></li>
+        <li><button onclick="fetchTrends('spain')">Spain</button></li>
+        <li><button onclick="fetchTrends('italy')">Italy</button></li>
+        <li><button onclick="fetchTrends('japan')">Japan</button></li>
+    </ul>
+    </section>
+
+
+    <p>This is interactive View Page</p>
+
+    <script src="{{ url_for('static', filename='leaf.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

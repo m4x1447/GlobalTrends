@@ -111,3 +111,62 @@ function showTrendInfo(event, trend) {
         document.removeEventListener('click', removeInfoBox);
     });
 }
+
+// Event listener for the checkbox
+document.getElementById('country-toggle').addEventListener('change', function () {
+    if (this.checked) {
+        startCyclingCountries(); // Start cycling countries when checkbox is checked
+    } else {
+        stopCyclingCountries(); // Stop cycling when checkbox is unchecked
+    }
+});
+
+
+function startCyclingCountries() {
+    autoZoomEnabled = true;
+    function cycleCountry() {
+        const country = countries[currentCountryIndex];
+        
+        // Move updateMapLocation here so it always updates, even if fetch fails
+        updateMapLocation(country); 
+        
+        fetchTrends(country);
+
+        progressLine.style.transition = 'none';
+        progressLine.style.width = '100%';
+        setTimeout(() => {
+            progressLine.style.transition = 'width 15s linear';
+            progressLine.style.width = '0%';
+        }, 50);
+
+        currentCountryIndex = (currentCountryIndex + 1) % countries.length;
+    }
+
+    document.getElementById("progress-line").style.display = "block";
+    cycleCountry();
+    cycleInterval = setInterval(cycleCountry, 15800);
+}
+// Function to stop cycling through countries
+function stopCyclingCountries() {
+    autoZoomEnabled = false;
+    document.getElementById("progress-line").style.display = "none";
+    clearInterval(cycleInterval);
+    cycleInterval = null;
+    currentCountryIndex = 0;
+}
+
+
+// Funksjon for å bytte mellom Map og Menu
+function showTab(tabId) {
+    // Skjuler alle tab-innhold
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.style.display = 'none');
+
+    // Vist valgt tab
+    document.getElementById(tabId).style.display = 'block';
+
+    // Aktivere riktig knapp
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(button => button.classList.remove('active'));
+    event.target.classList.add('active');
+}
