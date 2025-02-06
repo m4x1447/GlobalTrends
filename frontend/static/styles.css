@@ -52,7 +52,6 @@ body {
 /* Title styling */
 h1 {
     color: #1c1616;
-    margin: 16px 0px 16px 0px;
 }
 
 /* List styling */
@@ -79,6 +78,10 @@ li {
     flex-direction: row;
     height: auto;
     justify-content: flex-start;
+}
+
+#interactive-TC {
+    
 }
 
 /* Map container styling */
@@ -586,8 +589,7 @@ li {
 }
 
 #trendsResults ul {
-    list-style-type: none;
-    padding: 0;
+    width: auto;
 }
 
 .trend-item {
