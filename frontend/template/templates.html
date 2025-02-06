@@ -43,6 +43,13 @@
         </ul>
     </div>
 </div>
+ <!-- Leaflet JS (ekstern CDN) for kartfunksjonalitet -->
+ <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+ <!-- Lokale JavaScript-filer -->
+ <script src="{{ url_for('static', filename='leaf.js') }}"></script>
+ <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 <!-- Dette området vil endres basert på hvilken spesifikk side som bruker denne malen -->
 {% block content %}
