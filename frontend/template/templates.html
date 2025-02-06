@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Trends</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- Legg til flere stiler og skript om nødvendig -->
+</head>
+<body>
+
+<!-- Knapper og hamburger-meny -->
+<div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
+    <!-- Knapper for å bytte mellom faner -->
+    <a class="tab-button" href="{{ url_for('index') }}">Map View</a>
+    <a class="tab-button" href="{{ url_for('interactive') }}">Interactive View</a>
+    <a class="tab-button" href="{{ url_for('card') }}">Card View</a>
+    
+    <!-- Hamburger-meny for innstillinger -->
+    <div class="hamburger-menu" style="z-index: 1000;">
+        <input id="menu__toggle" type="checkbox" />
+        <label class="menu__btn" for="menu__toggle">
+            <span></span>
+        </label>
+        <!-- Innhold i sidemenyen -->
+        <ul id="menu__box">
+            <h2>Settings</h2>
+            <div class="cm-div" title="Toggle darkmode">
+                <label class="theme-toggle">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider"></span>
+                </label>
+                <span>Dark/Light mode</span>
+            </div>
+            <div class="cm-div">
+                <label class="theme-toggle" style="display: flex;">
+                    <input type="checkbox" id="country-toggle">
+                    <span class="slider"></span>
+                </label>
+                <p>Toggle to change country automatically</p>
+            </div>
+        </ul>
+    </div>
+</div>
+
+<!-- Dette området vil endres basert på hvilken spesifikk side som bruker denne malen -->
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

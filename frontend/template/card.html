@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Flip Card with Flags</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
             min-height: 100vh;
             background-color: #f7f7f7;
@@ -95,36 +94,14 @@
             margin: 5px 0;
         }
 
-        .buttons-container {
-            margin-bottom: 20px;
-        }
-
-        .button {
-            background-color: #00bcd4;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 10px;
-            color: white;
-            text-decoration: none;
-        }
-
-        .button:hover {
-            background-color: #00bcd4;
-        }
 
     </style>
 </head>
 <body>
+    {% extends "templates.html" %}
 
-    <h1>Trending Countries</h1>
-    <div class="buttons-container">
-        <a href="{{ url_for('index') }}" class="button">Map view</a>
-        <a href="{{ url_for('interactive') }}" class="button">Interactive</a>
-    </div>
-    
+    {% block content %}
+    <h1>Trending Countries</h1>    
     <div class="card-container">
         <!-- Norway -->
         <div class="card" onmouseover="fetchTrends('norway', this)">
@@ -379,7 +356,7 @@
         </div>
 
     </div>
-
+   
     <script>
         function fetchTrends(country, cardElement) {
             fetch(`/api/get-trends?country=${country}`)
@@ -400,6 +377,6 @@
             .catch(error => console.error("Error fetching trends:", error));
         }
     </script>
-
+ {% endblock %}
 </body>
 </html>

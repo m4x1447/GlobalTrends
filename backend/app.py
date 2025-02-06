@@ -16,22 +16,27 @@ pytrends = TrendReq(hl='en-US', tz=360)
 
 # Valid countries for trending searches
 VALID_COUNTRIES = {
-    'argentina': 'AR',  # Argentina
-    'australia': 'AU',  # Australia
-    'brazil': 'BR',     # Brazil
-    'canada': 'CA',     # Canada
-    'france': 'FR',     # France
-    'germany': 'DE',    # Germany
-    'india': 'IN',      # India
-    'italy': 'IT',      # Italy
-    'japan': 'JP',      # Japan
-    'mexico': 'MX',     # Mexico
-    'netherlands': 'NL',# Netherlands
-    'norway': 'NO',     # Norway
-    'sweden': 'SE',     # Sweden
-    'united_kingdom': 'GB',  # United Kingdom (UK)
-    'united_states': 'US'    # United States
+    'argentina': 'AR', 'australia': 'AU', 'brazil': 'BR', 'canada': 'CA',
+    'france': 'FR', 'germany': 'DE', 'india': 'IN', 'italy': 'IT', 'japan': 'JP',
+    'mexico': 'MX', 'netherlands': 'NL', 'norway': 'NO', 'sweden': 'SE',
+    'united_kingdom': 'GB', 'united_states': 'US', 'syria': 'SY', 'lebanon': 'LB',
+    'egypt': 'EG', 'saudi_arabia': 'SA', 'uae': 'AE', 'morocco': 'MA',
+    'algeria': 'DZ', 'iraq': 'IQ', 'jordan': 'JO', 'qatar': 'QA', 'kuwait': 'KW',
+    'oman': 'OM', 'tunisia': 'TN', 'bahrain': 'BH'
 }
+
+# Function to map country names to Google Trends format
+def get_google_trends_country_name(country):
+    country_mapping = {
+        'argentina': 'argentina', 'australia': 'australia', 'brazil': 'brazil', 'canada': 'canada',
+        'france': 'france', 'germany': 'germany', 'india': 'india', 'italy': 'italy', 'japan': 'japan',
+        'mexico': 'mexico', 'netherlands': 'netherlands', 'norway': 'norway', 'sweden': 'sweden',
+        'united_kingdom': 'united_kingdom', 'united_states': 'united_states', 'syria': 'syria', 'lebanon': 'lebanon',
+        'egypt': 'egypt', 'saudi_arabia': 'saudi_arabia', 'uae': 'united_arab_emirates', 'morocco': 'morocco',
+        'algeria': 'algeria', 'iraq': 'iraq', 'jordan': 'jordan', 'qatar': 'qatar', 'kuwait': 'kuwait',
+        'oman': 'oman', 'tunisia': 'tunisia', 'bahrain': 'bahrain'
+    }
+    return country_mapping.get(country, None)
 
 @app.route("/")
 def home():
@@ -47,10 +52,15 @@ def get_trends():
 
         # Check if the country is valid
         if country not in VALID_COUNTRIES:
-            return jsonify({'error': f"Invalid country: {country}. Valid options: {VALID_COUNTRIES}"}), 400
-        
+            return jsonify({'error': f"Invalid country: {country}. Valid options: {list(VALID_COUNTRIES.keys())}"}), 400
+
+        # Get the correct Google Trends country name
+        google_country_name = get_google_trends_country_name(country)
+        if not google_country_name:
+            return jsonify({'error': f"Country {country} is not supported by Google Trends"}), 400
+
         # Fetch trending searches for the specified country
-        trends_data = pytrends.trending_searches(pn=country)
+        trends_data = pytrends.trending_searches(pn=google_country_name)
         trending_now = trends_data[0].tolist() if not trends_data.empty else ["No data available"]
         
         return jsonify({'trends': trending_now})
@@ -59,9 +69,10 @@ def get_trends():
         return jsonify({'error': 'Failed to fetch trends'}), 500
 
 #Linking til HTML siden via FLASK server.
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
+
 # Custom 404 Error Page
 @app.errorhandler(404)
 def page_not_found(e):
@@ -77,35 +88,5 @@ def card():
 def interactive():
     return render_template('interactive.html')
 
-
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-'''
-from flask import Flask, render_template, request, jsonify
-from pytrends.request import TrendReq
-import os
-
-app = Flask(__name__, 
-            template_folder='../frontend/template',
-            static_folder='../frontend/static')
-
-# Initialize Pytrends
-pytrends = TrendReq(hl='en-US', tz=360)
-
-@app.route('/')
-def home():
-    # Get the trending searches in Norway
-    trending_searches_norway = pytrends.trending_searches(pn='norway')
-    
-    # Convert the trends to a list for easy display
-    trending_list = trending_searches_norway[0].tolist()  # Convert the first column to a list
-    
-    # Render the HTML page and pass the trending searches
-    return render_template('index.html', trends=trending_list)
-
-if __name__ == '__main__':
-    app.run(debug=True)
-'''
