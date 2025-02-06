@@ -11,6 +11,9 @@ const lightMode = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.pn
 const darkMode = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {subdomains: 'abcd'});
 lightMode.addTo(map);
 
+let currentCountryIndex = 0;
+let cycleInterval = null;
+
 const baseMaps = {"Light Mode": lightMode, "Dark Mode": darkMode};
 L.control.layers(baseMaps).addTo(map);
 
@@ -111,6 +114,8 @@ function showTrendInfo(event, trend) {
         document.removeEventListener('click', removeInfoBox);
     });
 }
+
+const progressLine = document.getElementById("progress-line");
 
 // Event listener for the checkbox
 document.getElementById('country-toggle').addEventListener('change', function () {
