@@ -8,7 +8,80 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <p>Dette er Interactive siden</p>
+    <div style="margin-bottom: 20px; display: flex; justify-content: flex-start;">
+        <!-- Knapper for å bytte mellom faner -->
+        <a class="tab-button" href="{{ url_for('index') }}">Map View</a>
+        <button class="tab-button" onclick="showTab('mapTab')" title="Get Trends With Map">interactive View</button>
+        <a class="tab-button" href="{{ url_for('card') }}">Card View</a>
+        
+       
+        <!-- Hamburger-meny for innstillinger -->
+        <div class="hamburger-menu" style="z-index: 1000;">
+            <input id="menu__toggle" type="checkbox" />
+            <label class="menu__btn" for="menu__toggle">
+                <span></span>
+            </label>
+            <!-- Innhold i sidemenyen -->
+            <ul class="" id="menu__box">
+                <h2>Settings</h2>
+                <div class="cm-div" title="Toggle darkmode">
+                    <label class="theme-toggle">
+                        <input type="checkbox" id="theme-switch">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Dark/Light mode</span>
+                </div>
+                <div class="cm-div">
+                    <label class="theme-toggle" style="display: flex;">
+                        <input type="checkbox" id="country-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <p>Toggle to change country automatically</p>
+                </div>
+            </ul>
+        </div>
+    </div>
 
+    <section class="trendsContainer">
+        <div id="trendsResults" class="trendsResults">
+            <h1 style="color: black;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
+            <ul>
+                <!-- Flask-løkke for å vise trender -->
+                {% for trend in trends %}
+                <li>
+                    <span class="trend-text">{{ trend }}</span> <!-- Trend tekst -->
+                    <a id="popup" href="#" onclick="showTrendInfo(event, '{{ trend }}')">
+                        <span class="info-icon"></span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+    <ul>
+        <li><button onclick="fetchTrends('norway')">Norway</button></li>
+        <li><button onclick="fetchTrends('united_states')">United States</button></li>
+        <li><button onclick="fetchTrends('brazil')">Brazil</button></li>
+        <li><button onclick="fetchTrends('france')">France</button></li>
+        <li><button onclick="fetchTrends('germany')">Germany</button></li>
+        <li><button onclick="fetchTrends('china')">China</button></li>
+        <li><button onclick="fetchTrends('india')">India</button></li>
+        <li><button onclick="fetchTrends('australia')">Australia</button></li>
+        <li><button onclick="fetchTrends('south_korea')">South Korea</button></li>
+        <li><button onclick="fetchTrends('united_kingdom')">United Kingdom</button></li>
+        <li><button onclick="fetchTrends('south_africa')">South Africa</button></li>
+        <li><button onclick="fetchTrends('canada')">Canada</button></li>
+        <li><button onclick="fetchTrends('mexico')">Mexico</button></li>
+        <li><button onclick="fetchTrends('spain')">Spain</button></li>
+        <li><button onclick="fetchTrends('italy')">Italy</button></li>
+        <li><button onclick="fetchTrends('japan')">Japan</button></li>
+    </ul>
+    </section>
+
+
+    <p>This is interactive View Page</p>
+
+    <script src="{{ url_for('static', filename='leaf.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

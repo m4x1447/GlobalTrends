@@ -164,7 +164,7 @@ function startCyclingCountries() {
         progressLine.style.transition = 'none';
         progressLine.style.width = '100%';
         setTimeout(() => {
-            progressLine.style.transition = 'width 5s linear';
+            progressLine.style.transition = 'width 15s linear';
             progressLine.style.width = '0%';
         }, 50);
 
@@ -173,7 +173,7 @@ function startCyclingCountries() {
 
     document.getElementById("progress-line").style.display = "block";
     cycleCountry();
-    cycleInterval = setInterval(cycleCountry, 5800);
+    cycleInterval = setInterval(cycleCountry, 15800);
 }
 // Function to stop cycling through countries
 function stopCyclingCountries() {
