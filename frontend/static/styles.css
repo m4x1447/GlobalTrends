@@ -588,6 +588,17 @@ li {
     background-color: #535db3;
 }
 
+.countries-list {
+    width: 35%;
+    padding: 20px;
+}
+
+#trendsResults {
+    margin-right: 0;
+    width: 35%;
+    padding: 20px;
+}
+
 #trendsResults ul {
     width: auto;
 }

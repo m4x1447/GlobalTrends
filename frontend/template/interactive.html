@@ -15,21 +15,7 @@
 
     {% block content %}
     <section class="trendsContainer" id="interactive-TC">
-        <div id="trendsResults" class="trendsResults">
-            <h1 style="color: black;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
-            <ul>
-                <!-- Flask-løkke for å vise trender -->
-                {% for trend in trends %}
-                <li>
-                    <span class="trend-text">{{ trend }}</span> <!-- Trend tekst -->
-                    <a id="popup" href="#" onclick="showTrendInfo(event, '{{ trend }}')">
-                        <span class="info-icon"></span>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <ul>
+        <ul class="countries-list" >
             <h1 style="color: black;">Choose a country</h1>
             <li><button onclick="fetchTrends('norway')">Norway</button></li>
             <li><button onclick="fetchTrends('united_states')">United States</button></li>
@@ -48,6 +34,23 @@
             <li><button onclick="fetchTrends('italy')">Italy</button></li>
             <li><button onclick="fetchTrends('japan')">Japan</button></li>
         </ul>
+        <div id="trendsResults" class="trendsResults">
+            <h1 style="color: black;">Current Trending Searches in Norway</h1> <!-- Tittel som viser trender i Norge -->
+            <ul>
+                <!-- Flask-løkke for å vise trender -->
+                {% for trend in trends %}
+                <li>
+                    <span class="trend-text">{{ trend }}</span> <!-- Trend tekst -->
+                    <a id="popup" href="#" onclick="showTrendInfo(event, '{{ trend }}')">
+                        <span class="info-icon"></span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="countries-list">
+            <h1>Search up a trend</h1>
+        </div>
     </section>
 
 
