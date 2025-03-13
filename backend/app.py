@@ -148,7 +148,7 @@ def wordcloud_data():
             try:
                 trends_data = pytrends.trending_searches(pn=google_country_name)
                 if not trends_data.empty:
-                    for trend in trends_data[0].tolist():
+                    for trend in trends_data[0].tol ist():
                         if trend in all_trends:
                             all_trends[trend] += 1
                         else:
@@ -168,3 +168,4 @@ def wordcloudview():
 
 if __name__ == '__main__':
     app.run(debug=True)
+ 
