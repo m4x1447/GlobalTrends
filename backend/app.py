@@ -4,6 +4,9 @@ import os
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import io
+import time
+from pathlib import Path
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 # Debugging: Check if the folders exist
 print("Template Folder Exists:", os.path.exists('../frontend/template'))
@@ -14,8 +17,20 @@ app = Flask(__name__,
             template_folder='../frontend/template',
             static_folder='../frontend/static')
 
-# Initialize PyTrends
-pytrends = TrendReq(hl='en-US', tz=360)
+# Cache configuration
+CACHE_DIR = Path("trends_cache")
+CACHE_DIR.mkdir(exist_ok=True)
+
+# Initialize PyTrends with proxies and retry
+PROXIES = []  # Legg til dine egne proxies her hvis nødvendig
+pytrends = TrendReq(
+    hl='en-US',
+    tz=360,
+    timeout=(10, 25),
+    proxies=PROXIES,
+    retries=2,
+    backoff_factor=0.1
+)
 
 # Valid countries for trending searches
 VALID_COUNTRIES = {
@@ -41,80 +56,132 @@ def get_google_trends_country_name(country):
     }
     return country_mapping.get(country, None)
 
+# Caching funksjon med 1 time cache-tid
+def get_cached_trends(country_code):
+    cache_file = CACHE_DIR / f"{country_code}.csv"
+    
+    if cache_file.exists():
+        modified_time = cache_file.stat().st_mtime
+        if (time.time() - modified_time) < 3600:  # 1 time cache
+            return pd.read_csv(cache_file)
+    
+    # Hvis ikke cachet eller utløpt
+    return None
+
+# Retry-logikk med eksponentiell backoff
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+def safe_fetch_trends(country_code):
+    trends_data = pytrends.trending_searches(pn=country_code)
+    time.sleep(10)  # 10 sekunder pause mellom forespørsler
+    return trends_data
+
 @app.route("/")
 def home():
-    # Mock data to display initially
     trends = ["Trend 1", "Trend 2", "Trend 3"]  
     return render_template("index.html", trends=trends)
 
 @app.route('/api/get-trends', methods=['GET'])
 def get_trends():
     try:
-        # Get the 'country' parameter from the request (default to 'norway')
         country = request.args.get('country', 'norway').lower()
 
-        # Check if the country is valid
         if country not in VALID_COUNTRIES:
-            return jsonify({'error': f"Invalid country: {country}. Valid options: {list(VALID_COUNTRIES.keys())}"}), 400
+            return jsonify({'error': f"Ugyldig land: {country}. Gyldige alternativer: {list(VALID_COUNTRIES.keys())}"}), 400
 
-        # Get the correct Google Trends country name
         google_country_name = get_google_trends_country_name(country)
         if not google_country_name:
-            return jsonify({'error': f"Country {country} is not supported by Google Trends"}), 400
+            return jsonify({'error': f"Land {country} støttes ikke av Google Trends"}), 400
 
-        # Fetch trending searches for the specified country
-        trends_data = pytrends.trending_searches(pn=google_country_name)
-        trending_now = trends_data[0].tolist() if not trends_data.empty else ["No data available"]
+        # Sjekk cache først
+        cached_data = get_cached_trends(google_country_name)
+        if cached_data is not None:
+            trending_now = cached_data[0].tolist()
+            return jsonify({'trends': trending_now, 'source': 'cache'})
+
+        # Hent ny data hvis ikke i cache
+        trends_data = safe_fetch_trends(google_country_name)
         
-        return jsonify({'trends': trending_now})
+        if trends_data.empty:
+            return jsonify({'trends': ["Ingen data tilgjengelig"]})
+        
+        # Lagre i cache
+        trends_data.to_csv(CACHE_DIR / f"{google_country_name}.csv")
+        trending_now = trends_data[0].tolist()
+        
+        return jsonify({'trends': trending_now, 'source': 'live'})
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({'error': 'Failed to fetch trends'}), 500
+        print(f"Feil: {e}")
+        return jsonify({'error': 'Kunne ikke hente trender'}), 500
 
-# Link til HTML siden via FLASK server
-@app.route('/index')
-def index():
-    return render_template('index.html')
-
-# Custom 404 Error Page
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
-
-# Card flip siden
-@app.route('/card')
-def card():
-    return render_template('card.html')
-
-# Interactive Siden
-@app.route('/interactive')
-def interactive():
-    return render_template('interactive.html')
-
-# WordCloud route - Fallback for generating image-based word cloud (old route)
-@app.route('/wordcloud')
-def wordcloud():
-    # Define which countries we want to get trends from
+# Resten av rutene med cache og rate limiting
+@app.route('/wordcloud-data')
+def wordcloud_data():
     countries = ['united_states', 'united_kingdom', 'india', 'france', 'germany']
-    
-    # Store all the trends in a dictionary to create a word cloud
     all_trends = {}
     
     for country in countries:
         google_country_name = get_google_trends_country_name(country)
         if google_country_name:
             try:
-                trends_data = pytrends.trending_searches(pn=google_country_name)
+                cached_data = get_cached_trends(google_country_name)
+                
+                if cached_data is None:
+                    trends_data = safe_fetch_trends(google_country_name)
+                    trends_data.to_csv(CACHE_DIR / f"{google_country_name}.csv")
+                else:
+                    trends_data = cached_data
+                
                 if not trends_data.empty:
                     for trend in trends_data[0].tolist():
-                        if trend in all_trends:
-                            all_trends[trend] += 1
-                        else:
-                            all_trends[trend] = 1
+                        all_trends[trend] = all_trends.get(trend, 0) + 1
+                time.sleep(5)  # Ekstra pause mellom land
             except Exception as e:
-                print(f"Error fetching trends for {country}: {e}")
+                print(f"Feil ved henting av trender for {country}: {e}")
 
-    # Generate the word cloud from the aggregated trends
+    wordcloud_data = [{"text": word, "weight": weight} for word, weight in all_trends.items()]
+    return jsonify(wordcloud_data)
+
+# Behold resten av rutene uendret
+@app.route('/index')
+def index():
+    return render_template('index.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.route('/card')
+def card():
+    return render_template('card.html')
+
+@app.route('/interactive')
+def interactive():
+    return render_template('interactive.html')
+
+@app.route('/wordcloud')
+def wordcloud():
+    countries = ['united_states', 'united_kingdom', 'india', 'france', 'germany']
+    all_trends = {}
+    
+    for country in countries:
+        google_country_name = get_google_trends_country_name(country)
+        if google_country_name:
+            try:
+                cached_data = get_cached_trends(google_country_name)
+                
+                if cached_data is None:
+                    trends_data = safe_fetch_trends(google_country_name)
+                    trends_data.to_csv(CACHE_DIR / f"{google_country_name}.csv")
+                else:
+                    trends_data = cached_data
+                
+                if not trends_data.empty:
+                    for trend in trends_data[0].tolist():
+                        all_trends[trend] = all_trends.get(trend, 0) + 1
+                time.sleep(5)
+            except Exception as e:
+                print(f"Feil ved henting av trender for {country}: {e}")
+
     wordcloud = WordCloud(
         width=800,
         height=400,
@@ -125,47 +192,14 @@ def wordcloud():
         max_words=50,
     ).generate_from_frequencies(all_trends)
 
-    # Save the word cloud image in memory (using BytesIO)
     img = io.BytesIO()
     wordcloud.to_image().save(img, format='PNG')
     img.seek(0)
-
-    # Return the image as HTTP response
     return Response(img, mimetype='image/png')
 
-# New route to fetch word cloud data as JSON for use in interactive cloud
-@app.route('/wordcloud-data')
-def wordcloud_data():
-    # Define which countries we want to get trends from
-    countries = ['united_states', 'united_kingdom', 'india', 'france', 'germany']
-    
-    # Store all the trends in a dictionary to create a word cloud
-    all_trends = {}
-    
-    for country in countries:
-        google_country_name = get_google_trends_country_name(country)
-        if google_country_name:
-            try:
-                trends_data = pytrends.trending_searches(pn=google_country_name)
-                if not trends_data.empty:
-                    for trend in trends_data[0].tol ist():
-                        if trend in all_trends:
-                            all_trends[trend] += 1
-                        else:
-                            all_trends[trend] = 1
-            except Exception as e:
-                print(f"Error fetching trends for {country}: {e}")
-
-    # Return the trends as a list of (word, frequency) tuples for use in the word cloud
-    wordcloud_data = [{"text": word, "weight": weight} for word, weight in all_trends.items()]
-    
-    return jsonify(wordcloud_data)
-
-# New route to show the word cloud page
 @app.route('/wordcloud-view')
 def wordcloudview():
     return render_template('wordcloudview.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
-  
