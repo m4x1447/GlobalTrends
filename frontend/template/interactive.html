@@ -48,11 +48,22 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="countries-list">
-            <h1>Search up a trend</h1>
-        </div>
-    </section>
+      <!-- Vis WordCloud-knapp -->
+  <div style="text-align: center;">
+    <h1>WordCloud</h1>
+    <button onclick="showWordCloud()">Vis WordCloud</button>
+    <div id="wordcloud-image" style="display: none; margin-top: 20px;">
+        <img src="{{ url_for('wordcloud') }}" alt="WordCloud Image">
+    </div>
+</div>
 
+    </section>
+  
+<script>
+    function showWordCloud() {
+        document.getElementById('wordcloud-image').style.display = 'block';
+    }
+</script>
 
   
 
