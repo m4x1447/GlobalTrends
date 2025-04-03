@@ -14,30 +14,89 @@ app = Flask(__name__,
             template_folder='../frontend/template',
             static_folder='../frontend/static')
 
-# Initialize PyTrends
-pytrends = TrendReq(hl='en-US', tz=360)
+# Initialize PyTrends with proper headers and timeouts
+pytrends = TrendReq(
+    hl='en-US',
+    tz=360,
+    timeout=(10,25),
+    requests_args={
+        'headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+        }
+    }
+)
 
-# Valid countries for trending searches
+# Valid countries for trending searches with their Google Trends codes
 VALID_COUNTRIES = {
-    'argentina': 'AR', 'australia': 'AU', 'brazil': 'BR', 'canada': 'CA',
-    'france': 'FR', 'germany': 'DE', 'india': 'IN', 'italy': 'IT', 'japan': 'JP',
-    'mexico': 'MX', 'netherlands': 'NL', 'norway': 'NO', 'sweden': 'SE',
-    'united_kingdom': 'GB', 'united_states': 'US', 'syria': 'SY', 'lebanon': 'LB',
-    'egypt': 'EG', 'saudi_arabia': 'SA', 'uae': 'AE', 'morocco': 'MA',
-    'algeria': 'DZ', 'iraq': 'IQ', 'jordan': 'JO', 'qatar': 'QA', 'kuwait': 'KW',
-    'oman': 'OM', 'tunisia': 'TN', 'bahrain': 'BH'
+    'argentina': 'argentina', 
+    'australia': 'australia', 
+    'brazil': 'brazil', 
+    'canada': 'canada',
+    'france': 'france', 
+    'germany': 'germany', 
+    'india': 'india', 
+    'italy': 'italy', 
+    'japan': 'japan',
+    'mexico': 'mexico', 
+    'netherlands': 'netherlands', 
+    'norway': 'norway', 
+    'sweden': 'sweden',
+    'united_kingdom': 'united_kingdom', 
+    'united_states': 'united_states',
+    'syria': 'syria', 
+    'lebanon': 'lebanon', 
+    'egypt': 'egypt', 
+    'saudi_arabia': 'saudi_arabia', 
+    'uae': 'uae', 
+    'morocco': 'morocco', 
+    'algeria': 'algeria', 
+    'iraq': 'iraq', 
+    'jordan': 'jordan', 
+    'qatar': 'qatar', 
+    'kuwait': 'kuwait', 
+    'oman': 'oman', 
+    'tunisia': 'tunisia', 
+    'bahrain': 'bahrain'
 }
 
 # Function to map country names to Google Trends format
 def get_google_trends_country_name(country):
+    # Google Trends uses specific country codes
     country_mapping = {
-        'argentina': 'argentina', 'australia': 'australia', 'brazil': 'brazil', 'canada': 'canada',
-        'france': 'france', 'germany': 'germany', 'india': 'india', 'italy': 'italy', 'japan': 'japan',
-        'mexico': 'mexico', 'netherlands': 'netherlands', 'norway': 'norway', 'sweden': 'sweden',
-        'united_kingdom': 'united_kingdom', 'united_states': 'united_states', 'syria': 'syria', 'lebanon': 'lebanon',
-        'egypt': 'egypt', 'saudi_arabia': 'saudi_arabia', 'uae': 'united_arab_emirates', 'morocco': 'morocco',
-        'algeria': 'algeria', 'iraq': 'iraq', 'jordan': 'jordan', 'qatar': 'qatar', 'kuwait': 'kuwait',
-        'oman': 'oman', 'tunisia': 'tunisia', 'bahrain': 'bahrain'
+        'argentina': 'argentina', 
+        'australia': 'australia', 
+        'brazil': 'brazil', 
+        'canada': 'canada',
+        'france': 'france', 
+        'germany': 'germany', 
+        'india': 'india', 
+        'italy': 'italy', 
+        'japan': 'japan',
+        'mexico': 'mexico', 
+        'netherlands': 'netherlands', 
+        'norway': 'norway', 
+        'sweden': 'sweden',
+        'united_kingdom': 'united_kingdom', 
+        'united_states': 'united_states',
+        'syria': 'syria', 
+        'lebanon': 'lebanon', 
+        'egypt': 'egypt', 
+        'saudi_arabia': 'saudi_arabia', 
+        'uae': 'uae', 
+        'morocco': 'morocco', 
+        'algeria': 'algeria', 
+        'iraq': 'iraq', 
+        'jordan': 'jordan', 
+        'qatar': 'qatar', 
+        'kuwait': 'kuwait', 
+        'oman': 'oman', 
+        'tunisia': 'tunisia', 
+        'bahrain': 'bahrain'
     }
     return country_mapping.get(country, None)
 
@@ -49,27 +108,42 @@ def home():
 
 @app.route('/api/get-trends', methods=['GET'])
 def get_trends():
+    print("Got request on /api/get-trends")
     try:
-        # Get the 'country' parameter from the request (default to 'norway')
         country = request.args.get('country', 'norway').lower()
-
-        # Check if the country is valid
+        print(f"Got request on /api/get-trends where country is {country}")
+        
         if country not in VALID_COUNTRIES:
+            print(f"This country was not valid {country}")
             return jsonify({'error': f"Invalid country: {country}. Valid options: {list(VALID_COUNTRIES.keys())}"}), 400
 
-        # Get the correct Google Trends country name
-        google_country_name = get_google_trends_country_name(country)
-        if not google_country_name:
-            return jsonify({'error': f"Country {country} is not supported by Google Trends"}), 400
+        google_country_name = VALID_COUNTRIES[country]
+        print(f"Google country name: {google_country_name}")
 
-        # Fetch trending searches for the specified country
-        trends_data = pytrends.trending_searches(pn=google_country_name)
-        trending_now = trends_data[0].tolist() if not trends_data.empty else ["No data available"]
-        
-        return jsonify({'trends': trending_now})
+        print("Attempting to fetch trends from PyTrends...")
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                trends_data = pytrends.trending_searches(pn=google_country_name)
+                print(f"Raw trends data: {trends_data}")
+                if trends_data is not None and not trends_data.empty:
+                    trending_now = trends_data[0].tolist()
+                    return jsonify({'trends': trending_now})
+                else:
+                    print("No data received from Google Trends")
+                    return jsonify({'error': 'No trending data available'}), 404
+            except Exception as trend_error:
+                print(f"Attempt {attempt + 1} failed: {str(trend_error)}")
+                if attempt == max_retries - 1:  # Last attempt
+                    print(f"All {max_retries} attempts failed")
+                    return jsonify({'error': f'Failed to fetch trends after {max_retries} attempts'}), 500
+                import time
+                time.sleep(2)  # Wait 2 seconds before retrying
+            
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({'error': 'Failed to fetch trends'}), 500
+        print(f"General error: {str(e)}")
+        print(f"Error type: {type(e)}")
+        return jsonify({'error': f'Failed to fetch trends: {str(e)}'}), 500
 
 # Link til HTML siden via FLASK server
 @app.route('/index')

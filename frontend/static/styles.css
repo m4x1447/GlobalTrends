@@ -649,19 +649,6 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-button {
-    background-color: var(--button-bg);
-    color: var(--button-text);
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: var(--text-color);
-    color: var(--background-color);
-}
 
 body.dark-mode {
     --menu_box-color2: #262626;
