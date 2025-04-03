@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import io
 import time
+import pandas as pd
+from pathlib import Path
 
 # Debugging: Check if the folders exist
 print("Template Folder Exists:", os.path.exists('../frontend/template'))
@@ -14,6 +16,14 @@ print("Static Folder Exists:", os.path.exists('../frontend/static'))
 app = Flask(__name__, 
             template_folder='../frontend/template',
             static_folder='../frontend/static')
+
+# Set up cache directory
+CACHE_DIR = Path(__file__).parent / 'cache'
+CACHE_DURATION = 3600  # Cache duration in seconds
+
+# Create cache directory if it doesn't exist
+if not CACHE_DIR.exists():
+    CACHE_DIR.mkdir(parents=True)
 
 # Initialize PyTrends with proper headers and timeouts
 pytrends = TrendReq(
@@ -30,8 +40,6 @@ pytrends = TrendReq(
             'Connection': 'keep-alive',
         }
     }
-
-
 )
 
 # Valid countries for trending searches with their Google Trends codes
@@ -103,24 +111,63 @@ def get_google_trends_country_name(country):
     }
     return country_mapping.get(country, None)
 
-# Caching funksjon med 1 time cache-tid
-def get_cached_trends(country_code):
-    cache_file = CACHE_DIR / f"{country_code}.csv"
-    
-    if cache_file.exists():
-        modified_time = cache_file.stat().st_mtime
-        if (time.time() - modified_time) < 3600:  # 1 time cache
-            return pd.read_csv(cache_file)
-    
-    # Hvis ikke cachet eller utløpt
-    return None
+def safe_fetch_trends(country, max_retries=3):
+    """Safely fetch trends with retry mechanism"""
+    for attempt in range(max_retries):
+        try:
+            pytrends.trending_searches(pn=country)
+            trends = pytrends.trending_searches(pn=country)
+            return trends
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise e
+            time.sleep(2 * (attempt + 1))  # Exponential backoff
+    return pd.DataFrame()  # Return empty DataFrame if all retries fail
 
-# Retry-logikk med eksponentiell backoff
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
-def safe_fetch_trends(country_code):
-    trends_data = pytrends.trending_searches(pn=country_code)
-    time.sleep(10)  # 10 sekunder pause mellom forespørsler
-    return trends_data
+def get_cached_trends(country):
+    """Get trends from cache if available and not expired"""
+    cache_file = CACHE_DIR / f"{country}.csv"
+    
+    if not cache_file.exists():
+        return None
+        
+    # Check if cache is expired
+    if time.time() - cache_file.stat().st_mtime > CACHE_DURATION:
+        return None
+        
+    try:
+        return pd.read_csv(cache_file)
+    except Exception:
+        return None
+
+def fetch_trends_for_countries(countries):
+    """Fetch trends for multiple countries with caching"""
+    all_trends = {}
+    
+    for country in countries:
+        google_country_name = get_google_trends_country_name(country)
+        if not google_country_name:
+            continue
+            
+        try:
+            cached_data = get_cached_trends(google_country_name)
+            
+            if cached_data is None:
+                trends_data = safe_fetch_trends(google_country_name)
+                if not trends_data.empty:
+                    trends_data.to_csv(CACHE_DIR / f"{google_country_name}.csv")
+            else:
+                trends_data = cached_data
+            
+            if not trends_data.empty:
+                for trend in trends_data[0].tolist():
+                    all_trends[trend] = all_trends.get(trend, 0) + 1
+            
+            time.sleep(2)  # Reduced sleep time between requests
+        except Exception as e:
+            print(f"Error fetching trends for {country}: {e}")
+            
+    return all_trends
 
 @app.route("/")
 def home():
@@ -142,60 +189,37 @@ def get_trends():
         print(f"Google country name: {google_country_name}")
 
         print("Attempting to fetch trends from PyTrends...")
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                trends_data = pytrends.trending_searches(pn=google_country_name)
-                print(f"Raw trends data: {trends_data}")
-                if trends_data is not None and not trends_data.empty:
+        try:
+            cached_data = get_cached_trends(google_country_name)
+            
+            if cached_data is None:
+                trends_data = safe_fetch_trends(google_country_name)
+                if not trends_data.empty:
+                    trends_data.to_csv(CACHE_DIR / f"{google_country_name}.csv")
                     trending_now = trends_data[0].tolist()
-                    return jsonify({'trends': trending_now})
                 else:
-                    print("No data received from Google Trends")
                     return jsonify({'error': 'No trending data available'}), 404
-            except Exception as trend_error:
-                print(f"Attempt {attempt + 1} failed: {str(trend_error)}")
-                if attempt == max_retries - 1:  # Last attempt
-                    print(f"All {max_retries} attempts failed")
-                    return jsonify({'error': f'Failed to fetch trends after {max_retries} attempts'}), 500
-                import time
-                time.sleep(2)  # Wait 2 seconds before retrying
+            else:
+                trending_now = cached_data[0].tolist()
+            
+            return jsonify({'trends': trending_now})
+            
+        except Exception as e:
+            print(f"Error fetching trends: {str(e)}")
+            return jsonify({'error': f'Failed to fetch trends: {str(e)}'}), 500
             
     except Exception as e:
         print(f"General error: {str(e)}")
         print(f"Error type: {type(e)}")
         return jsonify({'error': f'Failed to fetch trends: {str(e)}'}), 500
 
-
-# Resten av rutene med cache og rate limiting
 @app.route('/wordcloud-data')
 def wordcloud_data():
     countries = ['united_states', 'united_kingdom', 'india', 'france', 'germany']
-    all_trends = {}
-    
-    for country in countries:
-        google_country_name = get_google_trends_country_name(country)
-        if google_country_name:
-            try:
-                cached_data = get_cached_trends(google_country_name)
-                
-                if cached_data is None:
-                    trends_data = safe_fetch_trends(google_country_name)
-                    trends_data.to_csv(CACHE_DIR / f"{google_country_name}.csv")
-                else:
-                    trends_data = cached_data
-                
-                if not trends_data.empty:
-                    for trend in trends_data[0].tolist():
-                        all_trends[trend] = all_trends.get(trend, 0) + 1
-                time.sleep(5)  # Ekstra pause mellom land
-            except Exception as e:
-                print(f"Feil ved henting av trender for {country}: {e}")
-
+    all_trends = fetch_trends_for_countries(countries)
     wordcloud_data = [{"text": word, "weight": weight} for word, weight in all_trends.items()]
     return jsonify(wordcloud_data)
 
-# Behold resten av rutene uendret
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -215,26 +239,7 @@ def interactive():
 @app.route('/wordcloud')
 def wordcloud():
     countries = ['united_states', 'united_kingdom', 'india', 'france', 'germany']
-    all_trends = {}
-    
-    for country in countries:
-        google_country_name = get_google_trends_country_name(country)
-        if google_country_name:
-            try:
-                cached_data = get_cached_trends(google_country_name)
-                
-                if cached_data is None:
-                    trends_data = safe_fetch_trends(google_country_name)
-                    trends_data.to_csv(CACHE_DIR / f"{google_country_name}.csv")
-                else:
-                    trends_data = cached_data
-                
-                if not trends_data.empty:
-                    for trend in trends_data[0].tolist():
-                        all_trends[trend] = all_trends.get(trend, 0) + 1
-                time.sleep(5)
-            except Exception as e:
-                print(f"Feil ved henting av trender for {country}: {e}")
+    all_trends = fetch_trends_for_countries(countries)
 
     wordcloud = WordCloud(
         width=800,
